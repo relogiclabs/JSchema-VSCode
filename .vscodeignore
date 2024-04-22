@@ -1,0 +1,5 @@
+.vscode/**
+.idea/**
+.vscode-test/**
+test/**
+.gitignore
