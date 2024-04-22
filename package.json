@@ -1,0 +1,40 @@
+{
+	"name": "jschema",
+	"displayName": "JSchema",
+	"description": "JSchema support for Visual Studio Code",
+	"publisher": "RelogicLabs",
+	"version": "0.5.0",
+	"license": "AGPL-3.0",
+	"icon": "images/jschema-icon.png",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/relogiclabs/JSchema-VSCode"
+	},
+	"engines": {
+		"vscode": "^1.88.0"
+	},
+	"categories": [
+		"Other"
+	],
+	"keywords": [
+		"json schema",
+		"schema",
+		"json",
+		"validation",
+		"assert",
+		"test"
+	],
+	"contributes": {
+		"languages": [{
+			"id": "jschema",
+			"aliases": ["JSchema", "jschema"],
+			"extensions": [".jscm"],
+			"configuration": "./jschema-configuration.json"
+		}],
+		"grammars": [{
+			"language": "jschema",
+			"scopeName": "source.jschema",
+			"path": "./syntaxes/jschema.tmGrammar.json"
+		}]
+	}
+}

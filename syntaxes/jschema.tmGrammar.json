@@ -1,0 +1,392 @@
+{
+	"name": "JSchema",
+	"version": "0.5.0",
+	"scopeName": "source.jschema",
+	"patterns": [
+		{ "include": "#title" },
+		{ "include": "#version" },
+		{ "include": "#import" },
+		{ "include": "#pragma" },
+		{ "include": "#define" },
+		{ "include": "#schema" },
+		{ "include": "#script" },
+		{ "include": "#comment" }
+	],
+	"repository": {
+		"title": {
+			"name": "meta.directive.title.jschema",
+			"begin": "%title",
+			"beginCaptures": {
+				"0": { "name": "entity.name.tag.directive.title.jschema" }
+			},
+			"end": "^\\s*(?=%|$)",
+			"patterns": [
+				{ "include": "#separator-colon" },
+				{ "include": "#string" },
+				{ "include": "#comment" },
+				{ "include": "#invalid" }
+			]
+		},
+		"version": {
+			"name": "meta.directive.version.jschema",
+			"begin": "%version",
+			"beginCaptures": {
+				"0": { "name": "entity.name.tag.directive.version.jschema" }
+			},
+			"end": "^\\s*(?=%|$)",
+			"patterns": [
+				{ "include": "#separator-colon" },
+				{ "include": "#string" },
+				{ "include": "#comment" },
+				{ "include": "#invalid" }
+			]
+		},
+		"import": {
+			"name": "meta.directive.import.jschema",
+			"begin": "%import",
+			"beginCaptures": {
+				"0": { "name": "entity.name.tag.directive.import.jschema" }
+			},
+			"end": "^\\s*(?=%|$)",
+			"patterns": [
+				{ "include": "#separator-colon" },
+				{ "include": "#identifier-general" },
+				{ "include": "#separator-comma" },
+				{ "include": "#comment" },
+				{ "include": "#invalid" }
+			]
+		},
+		"pragma": {
+			"name": "meta.directive.pragma.jschema",
+			"begin": "%pragma",
+			"beginCaptures": {
+				"0": { "name": "entity.name.tag.directive.pragma.jschema" }
+			},
+			"end": "^\\s*(?=%|$)",
+			"patterns": [
+				{ "include": "#separator-colon" },
+				{ "include": "#primitive" },
+				{ "include": "#identifier-general" },
+				{ "include": "#comment" },
+				{ "include": "#invalid" }
+			]
+		},
+		"define": {
+			"name": "meta.directive.define.jschema",
+			"begin": "%define",
+			"beginCaptures": {
+				"0": { "name": "entity.name.tag.directive.define.jschema" }
+			},
+			"end": "^\\s*(?=%|$)",
+			"patterns": [
+				{
+					"match": "\\$[_[:alpha:]][_[:alnum:]]*",
+					"name": "variable.other.identifier.define.jschema"
+				},
+				{ "include": "#separator-colon" },
+				{ "include": "#validator" },
+				{ "include": "#comment" },
+				{ "include": "#invalid" }
+			]
+		},
+		"schema": {
+			"name": "meta.directive.schema.jschema",
+			"begin": "%schema",
+			"beginCaptures": {
+				"0": { "name": "entity.name.tag.directive.schema.jschema" }
+			},
+			"end": "^\\s*(?=%|$)",
+			"patterns": [
+				{ "include": "#separator-colon" },
+				{ "include": "#validator" },
+				{ "include": "#comment" },
+				{ "include": "#invalid" }
+			]
+		},
+		"script": {
+			"name": "meta.directive.script.jschema",
+			"begin": "%script",
+			"beginCaptures": {
+				"0": { "name": "entity.name.tag.directive.script.jschema" }
+			},
+			"end": "^\\s*(?=%|$)",
+			"patterns": [
+				{ "include": "#separator-colon" },
+				{
+					"name": "meta.structure.script.jschema",
+					"begin": "\\{",
+					"beginCaptures": {
+						"0": { "name": "punctuation.definition.script.begin.jschema" }
+					},
+					"end": "\\}",
+					"endCaptures": {
+						"0": { "name": "punctuation.definition.script.end.jschema" }
+					},
+					"patterns": [
+						{ "include": "source.js" },
+						{ "include": "#invalid" }
+					]
+				},
+				{ "include": "#comment" },
+				{ "include": "#invalid" }
+			]
+		},
+		"object": {
+			"name": "meta.structure.object.jschema",
+			"begin": "\\{",
+			"beginCaptures": {
+				"0": { "name": "punctuation.definition.object.begin.jschema" }
+			},
+			"end": "\\}",
+			"endCaptures": {
+				"0": { "name": "punctuation.definition.object.end.jschema" }
+			},
+			"patterns": [
+				{ "include": "#object-key" },
+				{
+                    "name": "meta.structure.object.value.jschema",
+					"begin": ":",
+					"beginCaptures": {
+						"0": { "name": "punctuation.separator.object.key-value.jschema" }
+					},
+					"end": "(,)|(?=\\})",
+					"endCaptures": {
+						"1": { "name": "punctuation.separator.object.property.jschema" }
+					},
+					"patterns": [
+						{ "include": "#validator" },
+						{ "include": "#comment" },
+						{
+							"match": "[^\\s,]",
+							"name": "invalid.illegal.expected-object-separator.jschema"
+						}
+					]
+				},
+				{ "include": "#comment" },
+				{
+					"match": "[^\\s\\}]",
+					"name": "invalid.illegal.expected-object-separator.jschema"
+				}
+			]
+		},
+		"array": {
+            "name": "meta.structure.array.jschema",
+			"begin": "\\[",
+			"beginCaptures": {
+				"0": { "name": "punctuation.definition.array.begin.jschema" }
+			},
+			"end": "\\]",
+			"endCaptures": {
+				"0": { "name": "punctuation.definition.array.end.jschema" }
+			},
+			"patterns": [
+				{ "include": "#validator" },
+				{ "include": "#separator-comma" },
+				{ "include": "#comment" },
+				{
+					"match": "[^\\s\\]]",
+					"name": "invalid.illegal.expected-array-separator.jschema"
+				}
+			]
+		},
+		"datatype": {
+			"name": "meta.structure.datatype.jschema",
+			"begin": "\\#[[:alpha:]]+",
+			"beginCaptures": {
+				"0": { "name": "entity.name.type.datatype.jschema" }
+			},
+			"end": "(?=[^*(])",
+			"patterns": [
+				{ "include": "#nested-operator" },
+				{
+					"begin": "\\(",
+					"beginCaptures": {
+						"0": { "name": "punctuation.definition.parameters.datatype.begin.jschema" }
+					},
+					"end": "\\)",
+					"endCaptures": {
+						"0": { "name": "punctuation.definition.parameters.datatype.end.jschema" }
+					},
+					"name": "entity.name.parameters.datatype.jschema",
+					"patterns": [
+						{ "include": "#alias" },
+						{ "include": "#comment" },
+						{
+							"match": "[^\\s\\)]",
+							"name": "invalid.illegal.unrecognized-syntax.jschema"
+						}
+					]
+				},
+				{ "include": "#comment" },
+				{ "include": "#invalid" }
+			]
+		},
+		"function": {
+			"name": "meta.structure.function.jschema",
+			"begin": "@[_[:alpha:]][_[:alnum:]]*",
+			"beginCaptures": {
+				"0": { "name": "entity.name.function.jschema" }
+			},
+			"end": "(?=[^*(])",
+			"patterns": [
+				{ "include": "#nested-operator" },
+				{
+					"begin": "\\(",
+					"beginCaptures": {
+						"0": { "name": "punctuation.definition.parameters.function.begin.jschema" }
+					},
+					"end": "\\)",
+					"endCaptures": {
+						"0": { "name": "punctuation.definition.parameters.function.end.jschema" }
+					},
+					"name": "entity.name.parameters.function.jschema",
+					"patterns": [
+						{ "include": "#value" },
+						{ "include": "#receiver" },
+						{ "include": "#separator-comma" },
+						{ "include": "#comment" },
+						{
+							"match": "[^\\s\\)]",
+							"name": "invalid.illegal.unrecognized-syntax.jschema"
+						}
+					]
+				},
+				{ "include": "#comment" },
+				{ "include": "#invalid" }
+			]
+		},
+		"string": {
+            "name": "string.quoted.double.jschema",
+			"begin": "\"",
+			"beginCaptures": {
+				"0": { "name": "punctuation.definition.string.begin.jschema" }
+			},
+			"end": "\"",
+			"endCaptures": {
+				"0": { "name": "punctuation.definition.string.end.jschema" }
+			},
+			"patterns": [
+				{ "include": "#string-content" }
+			]
+		},
+		"object-key": {
+            "name": "string.jschema support.type.property-name.jschema",
+			"begin": "\"",
+			"beginCaptures": {
+				"0": { "name": "punctuation.support.type.property-name.begin.jschema" }
+			},
+			"end": "\"",
+			"endCaptures": {
+				"0": { "name": "punctuation.support.type.property-name.end.jschema" }
+			},
+			"patterns": [
+				{ "include": "#string-content" }
+			]
+		},
+		"string-content": {
+			"patterns": [
+				{
+					"name": "constant.character.escape.jschema",
+					"match": "(?x)\\\\(?:[\"\\\\/bfnrt]|u[0-9a-fA-F]{4})"
+				},
+				{
+					"name": "invalid.illegal.unrecognized-string-escape.jschema",
+					"match": "\\\\."
+				}
+			]
+		},
+		"constant": {
+            "name": "constant.language.jschema",
+			"match": "\\b(?:true|false|null)\\b"
+		},
+		"number": {
+			"name": "constant.numeric.jschema",
+			"match": "(?x)-?(?:0|[1-9]\\d*)(?:(?:\\.\\d+)?(?:[eE][+-]?\\d+)?)?"
+		},
+		"alias": {
+			"name": "variable.other.alias.jschema",
+			"match": "\\$[_[:alpha:]][_[:alnum:]]*"
+		},
+		"receiver": {
+			"name": "variable.other.receiver.jschema",
+			"match": "&[_[:alpha:]][_[:alnum:]]*"
+		},
+		"identifier-general": {
+			"name": "variable.other.identifier.general.jschema",
+			"match": "[_[:alpha:]][_\\.[:alnum:]]*"
+		},
+		"comment": {
+			"patterns": [
+				{
+					"name": "comment.block.jschema",
+					"begin": "/\\*",
+					"captures": {
+						"0": { "name": "punctuation.definition.comment.jschema" }
+					},
+					"end": "\\*/"
+				},
+				{
+					"name": "comment.line.double-slash.jschema",
+					"match": "(//).*$\\n?",
+					"captures": {
+						"1": { "name": "punctuation.definition.comment.jschema" }
+					}
+				}
+			]
+		},
+		"validator": {
+			"patterns": [
+				{ "include": "#value" },
+				{ "include": "#datatype" },
+				{ "include": "#function" },
+				{ "include": "#alias" },
+				{ "include": "#receiver" },
+				{ "include": "#undefined-operator" },
+				{ "include": "#optional-operator" },
+				{ "include": "#comment" }
+			]
+		},
+		"value": {
+			"patterns": [
+				{ "include": "#constant" },
+				{ "include": "#number" },
+				{ "include": "#string" },
+				{ "include": "#array" },
+				{ "include": "#object" },
+				{ "include": "#comment" }
+			]
+		},
+		"primitive": {
+			"patterns": [
+				{ "include": "#constant" },
+				{ "include": "#number" },
+				{ "include": "#string" },
+				{ "include": "#comment" }
+			]
+		},
+		"separator-colon": {
+			"name": "punctuation.separator.colon.jschema",
+			"match": ":"
+		},
+		"separator-comma": {
+			"name": "punctuation.separator.comma.jschema",
+			"match": ","
+		},
+		"nested-operator": {
+			"name": "keyword.control.operator.nested.jschema",
+			"match": "\\*"
+		},
+		"optional-operator": {
+			"name": "keyword.control.operator.optional.jschema",
+			"match": "\\?"
+		},
+		"undefined-operator": {
+			"name": "keyword.control.operator.undefined.jschema",
+			"match": "!"
+		},
+		"invalid": {
+			"name": "invalid.illegal.unrecognized-syntax.jschema",
+			"match": "[^\\s]"
+		}
+	}
+}
